@@ -1,88 +1,81 @@
-from django.shortcuts import render, redirect
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework import status
 from .models import Aluno
+from .serializers import AlunoSerializer
 
-# Função para verificar se o usuário está logado
-def verificar_login(request):
-    # Verifica se o usuário está logado (se a chave 'usuario_logado' existe na sessão)
-    if 'usuario_logado' not in request.session:
-        return redirect('login')  # Se não estiver logado, redireciona para login
-    return None  # Se estiver logado, retorna None (continua normalmente)
-
-# Função de login
+# Login
+@api_view(['POST'])
 def login(request):
-    if request.method == 'POST':
-        usuario = request.POST.get('usuario')
-        senha = request.POST.get('senha')
+    usuario = request.data.get('usuario')
+    senha = request.data.get('senha')
 
-        # Verificar se o usuário e senha são "secretaria" e "1234"
-        if usuario == "secretaria" and senha == "1234":
-            request.session['usuario_logado'] = usuario  # Guarda o usuário na sessão
-            return redirect('home')  # Redireciona para a página inicial
-        else:
-            return render(request, "login.html", {"erro": "Usuário ou senha inválidos"})
-    return render(request, "login.html")
+    if usuario == "secretaria" and senha == "1234":
+        request.session['usuario_logado'] = usuario
+        return Response({"message": "Login realizado com sucesso"}, status=status.HTTP_200_OK)
+    return Response({"error": "Usuário ou senha inválidos"}, status=status.HTTP_401_UNAUTHORIZED)
 
-# Página inicial (home)
-def home(request):
-    # Verifica o login antes de continuar
-    if verificar_login(request):
-        return verificar_login(request)  # Se não estiver logado, redireciona para login
-    
-    alunos = Aluno.objects.all()
-    return render(request, "index.html", {"alunos": alunos})
-
-# Função para salvar dados de alunos
-def salvar(request):
-    # Verifica o login antes de continuar
-    if verificar_login(request):
-        return verificar_login(request)  # Se não estiver logado, redireciona para login
-    
-    nome = request.POST.get("nome")
-    email = request.POST.get("email")
-    cpf = request.POST.get("cpf")
-
-    Aluno.objects.create(nome=nome, email=email, cpf=cpf)
-    alunos = Aluno.objects.all()
-    return render(request, "index.html", {"alunos": alunos})
-
-# Função para editar dados de alunos
-def editar(request, id):
-    # Verifica o login antes de continuar
-    if verificar_login(request):
-        return verificar_login(request)  # Se não estiver logado, redireciona para login
-    
-    aluno = Aluno.objects.get(id=id)
-    return render(request, "update.html", {"aluno": aluno})
-
-# Função para alterar dados de alunos
-def alterar(request, id):
-    # Verifica o login antes de continuar
-    if verificar_login(request):
-        return verificar_login(request)  # Se não estiver logado, redireciona para login
-    
-    novoNome = request.POST.get("nome")
-    novoEmail = request.POST.get("email")
-    novoCPF = request.POST.get("cpf")
-    aluno = Aluno.objects.get(id=id)
-    aluno.nome = novoNome
-    aluno.email = novoEmail
-    aluno.cpf = novoCPF
-    aluno.save()
-    return redirect(home)
-
-# Função para excluir dados de alunos
-def excluir(request, id):
-    # Verifica o login antes de continuar
-    if verificar_login(request):
-        return verificar_login(request)  # Se não estiver logado, redireciona para login
-    
-    aluno = Aluno.objects.get(id=id)
-    aluno.delete()
-    return redirect(home)
-
-# Função para fazer logout
+# Logout
+@api_view(['POST'])
 def logout(request):
-    # Limpa a chave 'usuario_logado' da sessão
     if 'usuario_logado' in request.session:
         del request.session['usuario_logado']
-    return redirect('login')
+    return Response({"message": "Logout realizado com sucesso"}, status=status.HTTP_200_OK)
+
+# Listar alunos
+@api_view(['GET'])
+def listar_alunos(request):
+    if 'usuario_logado' not in request.session:
+        return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    alunos = Aluno.objects.all()
+    serializer = AlunoSerializer(alunos, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+# Adicionar aluno
+@api_view(['POST'])
+def adicionar_aluno(request):
+    if 'usuario_logado' not in request.session:
+        return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    serializer = AlunoSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Editar aluno
+@api_view(['GET', 'PUT'])
+def editar_aluno(request, id):
+    if 'usuario_logado' not in request.session:
+        return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        aluno = Aluno.objects.get(id=id)
+    except Aluno.DoesNotExist:
+        return Response({"error": "Aluno não encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = AlunoSerializer(aluno)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = AlunoSerializer(aluno, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# Excluir aluno
+@api_view(['DELETE'])
+def excluir_aluno(request, id):
+    if 'usuario_logado' not in request.session:
+        return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    try:
+        aluno = Aluno.objects.get(id=id)
+    except Aluno.DoesNotExist:
+        return Response({"error": "Aluno não encontrado"}, status=status.HTTP_404_NOT_FOUND)
+
+    aluno.delete()
+    return Response({"message": "Aluno excluído com sucesso"}, status=status.HTTP_204_NO_CONTENT)

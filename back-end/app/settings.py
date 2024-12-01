@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
     'core'
 ]
 
@@ -48,9 +49,21 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'app.urls'
+
+# Permitir apenas o frontend no domínio específico
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Substitua pelo domínio do frontend em produção
+]
+
+# Opcional: Permitir credenciais (sessões, cookies)
+CORS_ALLOW_CREDENTIALS = True
+SESSION_COOKIE_SAMESITE = None
+SESSION_COOKIE_SECURE = False  # Use True em produção com HTTPS
 
 TEMPLATES = [
     {
