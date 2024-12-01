@@ -1,4 +1,4 @@
-# Como fazer funcinar essa bomba
+# Como fazer funcioonar 
 
 ## Back-end
 ```python manage.py runserver```
