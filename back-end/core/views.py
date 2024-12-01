@@ -35,8 +35,8 @@ def listar_alunos(request):
 # Adicionar aluno
 @api_view(['POST'])
 def adicionar_aluno(request):
-    if 'usuario_logado' not in request.session:
-        return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+    # if 'usuario_logado' not in request.session:
+    #     return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
 
     serializer = AlunoSerializer(data=request.data)
     if serializer.is_valid():

@@ -12,6 +12,18 @@ const ApiService = () => {
         });
     }
 
+    async function add(nome: string, email: string, cpf: string) {
+
+        return await fetch("http://localhost:8000/alunos/adicionar", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ nome, email, cpf }),
+            credentials: 'include', // Inclui cookies
+        });
+    }
+
     async function list() {
 
         try {
@@ -34,7 +46,7 @@ const ApiService = () => {
         }
     }
 
-    return { login, list };
+    return { login, list, add };
 
 };
 
