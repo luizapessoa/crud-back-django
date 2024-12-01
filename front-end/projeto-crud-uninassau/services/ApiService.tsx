@@ -1,8 +1,8 @@
 const ApiService = () => {
 
-    function login(usuario: string, senha: string) {
+    async function login(usuario: string, senha: string) {
 
-        return fetch("http://localhost:8000/login", {
+        return await fetch("http://localhost:8000/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -12,15 +12,26 @@ const ApiService = () => {
         });
     }
 
-    function list() {
+    async function list() {
 
-        return fetch("http://localhost:8000/home", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: 'include', // Inclui cookies
-        });
+        try {
+            const response = await fetch('http://localhost:8000/alunos', {
+              method: 'POST', // A API foi configurada para o método POST
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+        
+            if (!response.ok) {
+              throw new Error(`Erro ao buscar alunos: ${response.statusText}`);
+            }
+        
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(error);
+            return [];
+        }
     }
 
     return { login, list };

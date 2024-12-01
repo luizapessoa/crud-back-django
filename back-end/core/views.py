@@ -23,10 +23,10 @@ def logout(request):
     return Response({"message": "Logout realizado com sucesso"}, status=status.HTTP_200_OK)
 
 # Listar alunos
-@api_view(['GET'])
+@api_view(['POST'])
 def listar_alunos(request):
-    if 'usuario_logado' not in request.session:
-        return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
+    # if 'usuario_logado' not in request.session:
+    #     return Response({"error": "Não autenticado"}, status=status.HTTP_401_UNAUTHORIZED)
 
     alunos = Aluno.objects.all()
     serializer = AlunoSerializer(alunos, many=True)

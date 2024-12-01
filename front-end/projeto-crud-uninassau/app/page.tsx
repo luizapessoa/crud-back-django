@@ -9,13 +9,15 @@ export default function Home() {
     const { list } = ApiService();
 
     useEffect(() => {
-        list().then((response) => {
-            if (response.ok) {
-                return response.json();
-            }
-        }).then((usuarios) => {
-            setUsuarios(usuarios);
+      const getUsuarios = async () => {
+        return await list();
+      }
+
+      if(usuarios.length === 0) {
+        getUsuarios().then((usuarios : any) => {
+          setUsuarios(usuarios);
         });
+      }
     });
 
     return (
