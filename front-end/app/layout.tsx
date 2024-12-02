@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Gerenciador de Alunos",
-  description: "Aplicação simples para gerenciamento de alunos",
+  description: "Aplicação simples para gerenciamento de alunos"
 };
 
 export default function RootLayout({
