@@ -1,43 +1,54 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import ApiService from "@/services/ApiService";
-import { Header } from "@/components/header"; 
-import { Footer } from "@/components/footer";
+import { Header } from "@/components/header";
 
 export default function Login() {
+  const router = useRouter();
 
-    const { login } = ApiService();
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-    const router = useRouter();
+    const user = document.getElementById("Usuario") as HTMLInputElement;
+    const senha = document.getElementById("Senha") as HTMLInputElement; // Obter os campos de usuário e senha por ID
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        
-        e.preventDefault();
+    if (user.value !== "secretaria") {
+      alert("Digite um nome de usuário válido");
+      return;
+    }
+    if (senha.value !== "1234") {
+      alert("Digite uma senha válida");
+      return;
+    }
 
-        const usuario = e.target.usuario.value;
-        const senha = e.target.senha.value;
+    alert("Login bem-sucedido");
 
-        login(usuario, senha).then((response) => {
-            if (response.ok) {
-                console.log(response.json());
-            }
-        }).then((usuario) => {
-            console.log(usuario);
-            router.push('/');
-        });
-    };
-
-    return (
-        <div>
-            <Header />
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="usuario" placeholder="Usuário" className="text-black w-full border-2 border-gray-300 p-2 rounded-md" />
-                <input type="password" name="senha" placeholder="Senha" className="text-black w-full border-2 border-gray-300 p-2 rounded-md" />
-                <button type="submit">Login</button>
-            </form>
-            
-        </div>
-    );
+    router.push("/");
+  };
+  return (
+    <div>
+      <Header />
+      <h1 className="text-xl font-bold mb-4">Login</h1>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <input
+          type="text"
+          id="Usuario" 
+          placeholder="Usuário"
+          className="text-black w-full border-2 border-gray-300 p-2 rounded-md"
+        />
+        <input
+          type="password"
+          id="Senha" 
+          placeholder="Senha"
+          className="text-black w-full border-2 border-gray-300 p-2 rounded-md"
+        />
+        <button
+          type="submit"
+          className="bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition duration-300"
+        >
+          Login
+        </button>
+      </form>
+    </div>
+  );
 }
