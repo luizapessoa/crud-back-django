@@ -2,11 +2,14 @@
 
 import ApiService from "@/services/ApiService";
 import { useEffect, useState } from "react";
+import { Header } from "@/components/header"; 
+import { Footer } from "@/components/footer";
+
 
 import { Loading } from "@/components/layout/Loading";
 
 export default function Home() {
-
+ 
   const [loading, setLoading]   = useState(false);
   const [usuarios, setUsuarios] = useState<Record<string>[]>([]);
   const [formData, setFormData] = useState({ nome: "", email: "", cpf: "" });
@@ -82,8 +85,9 @@ export default function Home() {
     <>
     { loading ? <Loading /> : (
       <div className="p-2">
+        <Header />
       <h1 className="text-3xl font-bold pb-10">Gerenciador de alunos</h1>
-
+      
       <div className="flex gap-4">
 
         <section className="w-full md:w-1/2 overflow-y-scroll max-h-screen bg-white shadow-md rounded-lg p-6 border border-gray-200">
@@ -171,11 +175,13 @@ export default function Home() {
             </button>
           </form>
         </section>
-
+        
       </div>
+      
     </div>
     )}
     </>
    
   );
+  
 }

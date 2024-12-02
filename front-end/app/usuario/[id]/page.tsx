@@ -4,6 +4,8 @@ import { use } from "react";
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import ApiService from '@/services/ApiService';
+import { Header } from "@/components/header"; 
+import { Footer } from "@/components/footer";
 
 export default function Aluno({ params }: { params: Promise<{ id: string }> }) {
 
@@ -39,6 +41,7 @@ export default function Aluno({ params }: { params: Promise<{ id: string }> }) {
 
     return (
         <div className="max-w-lg mx-auto mt-10 p-6 bg-white shadow-md rounded-lg border border-gray-200">
+             <Header />
             <h2 className="text-2xl font-bold text-gray-700 text-center mb-6">Editar Dados</h2>
             <form onSubmit={handleSave} className="space-y-4">
                 <div className="mb-4">
@@ -98,6 +101,7 @@ export default function Aluno({ params }: { params: Promise<{ id: string }> }) {
                     </button>
                 </div>
             </form>
+            <Footer />
         </div>
     );
 }

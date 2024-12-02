@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import ApiService from "@/services/ApiService";
+import { Header } from "@/components/header"; 
+import { Footer } from "@/components/footer";
 
 export default function Login() {
 
@@ -28,12 +30,14 @@ export default function Login() {
 
     return (
         <div>
+            <Header />
             <h1>Login</h1>
             <form onSubmit={handleSubmit}>
                 <input type="text" name="usuario" placeholder="Usuário" className="text-black w-full border-2 border-gray-300 p-2 rounded-md" />
                 <input type="password" name="senha" placeholder="Senha" className="text-black w-full border-2 border-gray-300 p-2 rounded-md" />
                 <button type="submit">Login</button>
             </form>
+            
         </div>
     );
 }
