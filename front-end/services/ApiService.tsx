@@ -8,7 +8,7 @@ const ApiService = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ usuario, senha }),
-            credentials: 'include', // Inclui cookies
+            credentials: 'include', 
         });
     }
 
@@ -19,7 +19,7 @@ const ApiService = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: 'include', // Inclui cookies
+            credentials: 'include', 
         });
 
         if (!response.ok) {
@@ -37,7 +37,7 @@ const ApiService = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ nome, email, cpf }),
-            credentials: 'include', // Inclui cookies
+            credentials: 'include', 
         });
     }
 
@@ -49,7 +49,7 @@ const ApiService = () => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({ nome, email, cpf }),
-            credentials: 'include', // Inclui cookies
+            credentials: 'include', 
         });
     }
 
@@ -60,7 +60,7 @@ const ApiService = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: 'include', // Inclui cookies
+            credentials: 'include', 
         });
     }
 
@@ -71,7 +71,7 @@ const ApiService = () => {
             headers: {
                 "Content-Type": "application/json",
             },
-            credentials: 'include', // Inclui cookies
+            credentials: 'include',  
         });
 
         if (!response.ok) {

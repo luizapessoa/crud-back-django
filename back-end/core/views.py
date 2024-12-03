@@ -11,7 +11,6 @@ def login(request):
     usuario = request.data.get('usuario')
     senha = request.data.get('senha')
 
-    # [INFO] Dados estáticos para testes
     if usuario == "secretaria" and senha == "1234":
         request.session['usuario_logado'] = usuario
         return Response({"message": "Login realizado com sucesso"}, status=status.HTTP_200_OK)
