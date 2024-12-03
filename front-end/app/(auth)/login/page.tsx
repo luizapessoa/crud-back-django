@@ -13,11 +13,11 @@ export default function Login() {
     const senha = document.getElementById("Senha") as HTMLInputElement; // Obter os campos de usuário e senha por ID
 
     if (user.value !== "secretaria") {
-      alert("Digite um nome de usuário válido");
+      alert("Digite uma senha ou usuário válido");
       return;
     }
     if (senha.value !== "1234") {
-      alert("Digite uma senha válida");
+      alert("Digite uma senha ou usuario válida");
       return;
     }
 

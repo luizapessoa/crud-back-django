@@ -42,21 +42,21 @@ def adicionar_aluno(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Get aluno
-@api_view(['POST', 'GET'])
+@api_view(['POST'])
 def get_aluno(request, id):
     aluno = Aluno.objects.get(id=id)
     serializer = AlunoSerializer(aluno)
     return Response(serializer.data)
 
 # Editar aluno
-@api_view(['POST', 'GET'])
+@api_view(['POST'])
 def editar_aluno(request, id):
     try:
         aluno = Aluno.objects.get(id=id)
     except Aluno.DoesNotExist:
         return Response({"error": "Aluno não encontrado"}, status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'GET':
+    if request.method == 'Post':
         serializer = AlunoSerializer(aluno)
         return Response(serializer.data)
 
